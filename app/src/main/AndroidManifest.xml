@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vkcrestore"
+
+    >
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
+
+    <application
+        android:name=".MyApplication"
+        android:icon="@drawable/vkc_icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:fullBackupContent="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".SearchUserActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".AddUserActivity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".SurveySetActivity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".ViewUserActivity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".EditUserActivity"
+            android:label="@string/app_name"></activity>
+        <!-- <activity
+            android:name="com.vkcrestore.SurveyActivity"
+            android:label="@string/app_name" >
+        </activity> -->
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.SingleSelectionRadio"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.SingleSelectionList"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.TabularQuestions"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.Matrix"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.Order"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.MultiSelectionCheck"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.Slider"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.Star"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.TextInput"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.ImageFeedback"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.IntInput"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.VKCAppActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.VKCLoginActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyListActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.VKCSplash"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.vkcrestore.SurveyUpdateActivity"></activity>
+        <activity android:name="com.vkcrestore.SurveyTypes.ImageCapture"></activity>
+        <activity android:name="com.vkcrestore.SurveyTypes.ShowPicture"></activity>
+        <activity android:name="com.vkcrestore.SurveyTypes.Decision"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.AutoComplete"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.TourPlanDetailsActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <!--  <activity
+             android:name="com.vkcrestore.ContactUsActivity"
+             android:windowSoftInputMode="adjustPan" >
+         </activity> -->
+        <activity
+            android:name="com.vkcrestore.AddClaimsActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.AttendanceActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.ClaimListActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.ShowCustomers"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.SurveyTypes.ImageSelection"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.TourPlanListingActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.vkcrestore.AddUserToPlan"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <!-- <activity
+            android:name="com.vkcrestore.SurveyTypes.TabularQuestionNew"
+            android:windowSoftInputMode="adjustPan" >
+        </activity> -->
+        <activity
+            android:name="com.vkcrestore.RestoreList"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/blackText"></activity>
+        <service
+            android:name="com.vkcrestore.gps.GpsLocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/gps_service"></service>
+        <!-- <service
+             android:name=".manager.TimerService"
+             android:enabled="true"
+             android:exported="false"
+             android:permission="android.permission.BIND_JOB_SERVICE"/>-->
+        <!--<service
+            android:name=".manager.RemoteService"
+            android:enabled="true"
+            android:exported="false"></service>-->
+        <!-- <service
+            android:name="com.vkcrestore.SyncCustomerService"
+            android:enabled="true"
+            android:label="@string/gps_service" >
+        </service> -->
+
+        <receiver
+            android:name="com.vkcrestore.gps.RepeatGpsReciever"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.vkcrestore.gps.RepeatGpsReciever" />
+            </intent-filter>
+        </receiver>
+
+
+        <!--<receiver
+            android:name="com.vkcrestore.manager.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>-->
+    </application>
+
+</manifest>
