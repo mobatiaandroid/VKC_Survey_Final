@@ -8,19 +8,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.vkcrestore.SQLiteServices.SQLiteAdapter;
 import com.vkcrestore.api.Model.AttendanceResponseModel;
+import com.vkcrestore.api.Model.DeviceIDResponseModel;
 import com.vkcrestore.api.RetrofitAPI;
-import com.vkcrestore.api.VkcApis;
 import com.vkcrestore.gps.GpsLocationService;
 import com.vkcrestore.gps.GpsUtility;
 import com.vkcrestore.gps.LocationTrack;
@@ -28,10 +25,8 @@ import com.vkcrestore.manager.AppPreferenceManager;
 import com.vkcrestore.manager.CustomProgressBar;
 import com.vkcrestore.manager.UtilityMethods;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,12 +36,10 @@ import retrofit2.Response;
 
 public class VKCSplash extends Activity {
     String flag;
-    Context context = this;
-    SQLiteAdapter databaseHelper;
+    Context context;
     LocationTrack locationTrack;
     String latitude, longitude, placename = "";
-    String attendance_type, attendance_id;
-    CustomProgressBar progress;
+    ArrayList<String> listEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +48,8 @@ public class VKCSplash extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
         context = this;
-        databaseHelper = new SQLiteAdapter(this);
         flag = AppPreferenceManager.getFlag(context);
-
+        int size = listEmpty.size();
         new GpsUtility(this).turnGPSOn(new GpsUtility.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {
@@ -122,120 +114,6 @@ public class VKCSplash extends Activity {
 
     }
 
-    public class attendanceStatus extends AsyncTask<Void, Integer, Void> {
-        JSONObject response;
-        String status;
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            progress.dismiss();
-            status = response.optString("response");
-            if (status.equalsIgnoreCase("punch_in")) {
-                AppPreferenceManager.saveAttendance(true, context);
-                Thread background = new Thread() {
-                    public void run() {
-
-                        try {
-
-                            sleep(1000);
-
-                            if (flag.equals("1")) {
-
-                                Intent i = new Intent(VKCSplash.this, VKCAppActivity.class);
-                                startActivity(i);
-
-                            } else if (flag.equals("0")) {
-                                Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
-                                startActivity(i);
-                            } else {
-                                Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
-                                startActivity(i);
-                            }
-
-                            finish();
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-                };
-
-                // start thread
-                background.start();
-            } else {
-
-                AppPreferenceManager.saveAttendance(false, context);
-
-                Thread background = new Thread() {
-                    public void run() {
-
-                        try {
-
-                            sleep(1000);
-
-
-                            if (flag.equals("1")) {
-
-                                Intent i = new Intent(VKCSplash.this, AttendanceActivity.class);
-                                startActivity(i);
-
-                            } else if (flag.equals("0")) {
-                                Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
-                                startActivity(i);
-                            } else {
-                                Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
-                                startActivity(i);
-                            }
-
-                            finish();
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-                };
-
-                background.start();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-
-            // setProgrees(false);
-            /*
-             * progress.setVisibility(View.VISIBLE);
-             * Toast.makeText(getApplicationContext(), "Connecting server",
-             * Toast.LENGTH_SHORT).show();
-             */
-            progress = new CustomProgressBar(context, R.drawable.loading);
-            progress.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            // getCustomerListsforExport();
-            // getServeyResultsLists();
-            try {
-                response = VkcApis.user_attendance(AppPreferenceManager.getUserId(context), "status", AppPreferenceManager.getAttendanceId(context), latitude, longitude, placename, "", context);
-
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-    }
-
     PermissionListener permissionVidyoCalllistener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
@@ -275,11 +153,38 @@ public class VKCSplash extends Activity {
                     gpsalertbox("GPS Alert", "Please enable your location.."
                     );
                 } else {
-                   /* attendanceStatus attendance = new attendanceStatus();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-                        attendance.execute();
-                    }*/
-                    callAttendanceAPI();
+
+                    if (AppPreferenceManager.getDeviceID(context).equals("") && !AppPreferenceManager.getUserId(context).equals("")) {
+                        getDeviceID();
+                    } else if (!AppPreferenceManager.getUserId(context).equals("")) {
+                        callAttendanceAPI();
+                    } else {
+                        if (flag.equals("1")) {
+                            finish();
+
+                            Intent i = new Intent(VKCSplash.this, VKCAppActivity.class);
+                            startActivity(i);
+                            overridePendingTransition(0, 0);
+
+                        } else if (flag.equals("0")) {
+                            finish();
+
+                            Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
+                            startActivity(i);
+                            overridePendingTransition(0, 0);
+
+                        } else {
+                            finish();
+
+                            Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
+                            startActivity(i);
+                            overridePendingTransition(0, 0);
+
+                        }
+
+
+                    }
+
                 }
             } else {
                 Toast.makeText(context, "Please check your internet connectivity...", Toast.LENGTH_SHORT).show();
@@ -337,7 +242,7 @@ public class VKCSplash extends Activity {
                 add = add + "\n" + obj.getLocality();
                 place = obj.getLocality();
 
-                Log.v("IGA", "Address" + add);
+                //  Log.v("IGA", "Address" + add);
             } else {
                 Toast.makeText(this, "Please check your gps connection", Toast.LENGTH_SHORT).show();
             }
@@ -355,9 +260,9 @@ public class VKCSplash extends Activity {
 
     public void callAttendanceAPI() {
 
-        progress = new CustomProgressBar(context, R.drawable.loading);
+        final CustomProgressBar progress = new CustomProgressBar(context, R.drawable.loading);
         progress.show();
-        RetrofitAPI.getClient().getAttendance(AppPreferenceManager.getUserId(context), "status", AppPreferenceManager.getAttendanceId(context), latitude, longitude, placename, "").enqueue(new Callback<AttendanceResponseModel>() {
+        RetrofitAPI.getClient().getAttendance(AppPreferenceManager.getUserId(context), "status", AppPreferenceManager.getAttendanceId(context), "5.01", "77.06", "Test", "Test").enqueue(new Callback<AttendanceResponseModel>() {
 
             @Override
             public void onResponse(Call<AttendanceResponseModel> call, Response<AttendanceResponseModel> response) {
@@ -366,40 +271,38 @@ public class VKCSplash extends Activity {
                     AppPreferenceManager.saveAttendance(true, context);
                     progress.dismiss();
                     if (flag.equals("1")) {
-
+                        finish();
                         Intent i = new Intent(VKCSplash.this, VKCAppActivity.class);
                         startActivity(i);
 
                     } else if (flag.equals("0")) {
+                        finish();
                         Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
                         startActivity(i);
                     } else {
+                        finish();
                         Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
                         startActivity(i);
                     }
 
-                    finish();
-
 
                 } else {
-
+                    progress.dismiss();
                     AppPreferenceManager.saveAttendance(false, context);
-
-
                     if (flag.equals("1")) {
-
+                        finish();
                         Intent i = new Intent(VKCSplash.this, AttendanceActivity.class);
                         startActivity(i);
 
                     } else if (flag.equals("0")) {
+                        finish();
                         Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
                         startActivity(i);
                     } else {
+                        finish();
                         Intent i = new Intent(VKCSplash.this, VKCLoginActivity.class);
                         startActivity(i);
                     }
-
-                    finish();
 
 
                 }
@@ -412,6 +315,39 @@ public class VKCSplash extends Activity {
 
             }
         });
+
+
+    }
+
+
+    public void getDeviceID() {
+
+
+        RetrofitAPI.getClient().getDeviceID(AppPreferenceManager.getUserId(context)).enqueue(new Callback<DeviceIDResponseModel>() {
+
+            @Override
+            public void onResponse(Call<DeviceIDResponseModel> call, Response<DeviceIDResponseModel> response) {
+                String status = response.body().getResponse();
+                if (status.equalsIgnoreCase("Success")) {
+                    AppPreferenceManager.saveDeviceID(response.body().getDeviceid(), context);
+                    callAttendanceAPI();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DeviceIDResponseModel> call, Throwable t) {
+
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTrack.stopListener();
     }
 }
 

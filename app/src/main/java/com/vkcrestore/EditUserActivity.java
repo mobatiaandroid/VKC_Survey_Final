@@ -13,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,6 +33,8 @@ import com.vkcrestore.UsrValues.UserValues;
 import com.vkcrestore.gps.LocationTrack;
 import com.vkcrestore.manager.Headermanager;
 import com.vkcrestore.manager.Utils;
+
+import androidx.core.app.ActivityCompat;
 
 public class EditUserActivity extends Activity implements LocationListener {
 

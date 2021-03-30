@@ -1490,8 +1490,13 @@ public class SettingsActivity extends Activity implements
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
+//Bibin Comment
 
-                                if (PreferenceManager.getCustUpdate(context).equals("no")) {
+
+
+                                doSetupAsynchTask set = new doSetupAsynchTask();
+                                set.execute();
+                               /* if (PreferenceManager.getCustUpdate(context).equals("no")) {
                                     Toast.makeText(
                                             context,
                                             "Sorry! Export customer data first!!",
@@ -1502,7 +1507,7 @@ public class SettingsActivity extends Activity implements
                                     doSetupAsynchTask set = new doSetupAsynchTask();
                                     set.execute();
 
-                                }
+                                }*/
                             }
                         }).show();
     }

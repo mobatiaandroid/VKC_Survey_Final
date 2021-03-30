@@ -21,7 +21,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +46,7 @@ import com.vkcrestore.manager.AudioRecorder;
 import com.vkcrestore.manager.Utils;
 import com.vkcrestore.R;
 
+import androidx.core.app.ActivityCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

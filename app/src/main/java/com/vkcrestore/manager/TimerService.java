@@ -4,7 +4,6 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.vkcrestore.VKCAppActivity;
@@ -12,6 +11,8 @@ import com.vkcrestore.VKCAppActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+
+import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class TimerService extends JobService {

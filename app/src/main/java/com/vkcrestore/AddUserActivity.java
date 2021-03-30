@@ -13,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +38,8 @@ import com.vkcrestore.manager.Utils;
 
 import java.sql.Timestamp;
 import java.util.Date;
+
+import androidx.core.app.ActivityCompat;
 
 public class AddUserActivity extends Activity implements LocationListener {
 

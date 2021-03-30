@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -42,12 +37,12 @@ import com.vkcrestore.UsrValues.ConnectionManager;
 import com.vkcrestore.UsrValues.PreferenceManager;
 import com.vkcrestore.UsrValues.SdcardManager;
 import com.vkcrestore.UsrValues.UserValues;
+import com.vkcrestore.api.Model.DeviceIDResponseModel;
+import com.vkcrestore.api.RetrofitAPI;
 import com.vkcrestore.api.VkcApis;
-import com.vkcrestore.gps.GpsLocationService;
 import com.vkcrestore.gps.LocationTrack;
 import com.vkcrestore.manager.AppPreferenceManager;
 import com.vkcrestore.manager.ConnectivityReceiver.ConnectivityReceiverListener;
-import com.vkcrestore.manager.TimerService;
 import com.vkcrestore.manager.Utils;
 
 import java.io.BufferedReader;
@@ -60,9 +55,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
+import androidx.core.app.ActivityCompat;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VKCAppActivity extends Activity implements ConnectivityReceiverListener, LocationListener {
 
@@ -156,6 +153,18 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
             mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
         }
 
+        if (Build.VERSION.SDK_INT >= 29) {
+            if (ConnectionManager
+                    .checkIntenetConnection(context)) {
+
+
+                getDeviceID();
+            } else {
+                Toast.makeText(context,
+                        "No internet connection ",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
         try {
             databaseHelper.createDataBase();
         } catch (IOException e) {
@@ -178,6 +187,7 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
         // //Loop question testing
 
     }
+
 
     @Override
     protected void onResume() {
@@ -389,6 +399,8 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
                         } else {
                             if (ConnectionManager
                                     .checkIntenetConnection(context)) {
+
+
                                 //System.out.println("Not upgraded");
                                 BackgroundAsyncTask ii = new BackgroundAsyncTask();
                                 ii.execute();
@@ -826,6 +838,28 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
 
     }
 
+    public void getDeviceID() {
+
+
+        RetrofitAPI.getClient().getDeviceID(AppPreferenceManager.getUserId(context)).enqueue(new Callback<DeviceIDResponseModel>() {
+
+            @Override
+            public void onResponse(Call<DeviceIDResponseModel> call, Response<DeviceIDResponseModel> response) {
+                String status = response.body().getResponse();
+                if (status.equalsIgnoreCase("Success")) {
+                    AppPreferenceManager.saveDeviceID(response.body().getDeviceid(), context);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DeviceIDResponseModel> call, Throwable t) {
+
+
+            }
+        });
+    }
 
     protected void showAlertSurvey(boolean isConnected) {
         if (isConnected) {
@@ -940,6 +974,7 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
 /**
  * Simple class for storing important data across config changes
  */
+
 class MyStateSaver {
     public boolean showSplashScreen = false;
     // Your other important fields here

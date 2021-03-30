@@ -678,8 +678,9 @@ public class VkcApis implements IVkcApis {
 
             //response = json_Response.getString("response").toString();
 
-            attendance_id_ = json_Response.optString("attendance_id").toString();
-            String message = json_Response.optString("message").toString();
+           // attendance_id_ = json_Response.optString("attendance_id").toString();
+           // String message = json_Response.optString("message").toString();
+            AppPreferenceManager.saveDeviceID("",mContext);
             /*if (response.equalsIgnoreCase("error")) {
                 response = message;
             }

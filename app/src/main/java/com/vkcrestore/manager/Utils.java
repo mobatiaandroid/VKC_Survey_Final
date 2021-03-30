@@ -22,13 +22,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.vkcrestore.constants.GlobalConstants;
+
+import androidx.core.app.ActivityCompat;
 
 public class Utils {
 

@@ -2,7 +2,6 @@ package com.vkcrestore.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,8 @@ import com.vkcrestore.Profiles.Profile;
 import com.vkcrestore.R;
 
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
     private ArrayList<Profile> profiles;

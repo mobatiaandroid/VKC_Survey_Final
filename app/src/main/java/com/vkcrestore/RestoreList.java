@@ -60,7 +60,7 @@ public class RestoreList extends ListActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        File mydir = new File(Environment.getExternalStorageDirectory(), "VKCSurvey");
+        File mydir = new File(Environment.getExternalStorageDirectory(), "WalkarooSurvey");
         if (!mydir.exists()) {
             mydir.mkdirs();
         }

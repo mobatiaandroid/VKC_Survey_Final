@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
 
     <!-- <string name="app_name">VKC Restore</string> -->
-    <string name="app_name">VKC Survey</string>
+    <string name="app_name">Survey</string>
     <string name="custname">Customer Name</string>
     <string name="shopname">Shop Name</string>
     <string name="addr1">Door No</string>
