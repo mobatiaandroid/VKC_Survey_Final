@@ -58,7 +58,7 @@
         android:divider="#d00000"
         android:dividerHeight="1dp"
         android:listSelector="@android:color/transparent"></ListView>-->
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchListview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

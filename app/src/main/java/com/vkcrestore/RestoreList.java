@@ -204,7 +204,7 @@ public class RestoreList extends ListActivity implements View.OnClickListener {
 				}*/
 
                 // File mydir = getDir("VKCSurvey", Context.MODE_PRIVATE); //Creating an internal dir;
-                File mydir = new File(Environment.getExternalStorageDirectory(), "VKCSurvey");
+                File mydir = new File(Environment.getExternalStorageDirectory(), "WalkarooSurvey");
 
 
                 if (mydir.exists()) {

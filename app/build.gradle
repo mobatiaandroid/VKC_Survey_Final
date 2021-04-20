@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.vkcrestore"
         useLibrary 'org.apache.http.legacy'
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 2
         versionName "1.11"
 
@@ -29,6 +30,7 @@ dependencies {
     //implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'gun0912.ted:tedpermission:2.2.2'
     implementation 'com.android.support:recyclerview-v7:29.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 
     implementation 'com.mindorks:paracamera:0.2.2'
     //testImplementation 'junit:junit:4.12'
@@ -39,11 +41,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     // JSON Parsing
-    implementation 'com.google.firebase:firebase-crashlytics:17.4.0'
+
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:26.8.0')
 
     implementation 'com.google.code.gson:gson:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation 'com.google.firebase:firebase-analytics:18.0.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

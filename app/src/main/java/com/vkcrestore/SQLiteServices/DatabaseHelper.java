@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             /*String myPath = myContext.getFilesDir().getAbsolutePath()
                     .replace("files", "databases")
 					+ File.separator + DB_NAME;*/
-            File mydir = new File(Environment.getExternalStorageDirectory(), "VKCSurvey");
+            File mydir = new File(Environment.getExternalStorageDirectory(), "WalkarooSurvey");
             if (!mydir.exists()) {
                 mydir.mkdirs();
             }

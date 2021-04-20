@@ -37,7 +37,7 @@ public class SQLiteAdapter {
     }
 
     public SQLiteAdapter openToRead() throws android.database.SQLException {
-        File mydir = new File(Environment.getExternalStorageDirectory(), "VKCSurvey");
+        File mydir = new File(Environment.getExternalStorageDirectory(), "WalkarooSurvey");
         DB_PATH = mydir.getAbsolutePath() + "/" + DB_NAME;
         sqLiteHelper = new SQLiteHelper(context, DB_PATH, null, DB_VERSION);
         sqLiteDatabase = sqLiteHelper.getReadableDatabase();
@@ -45,7 +45,7 @@ public class SQLiteAdapter {
     }
 
     public SQLiteAdapter openToWrite() throws android.database.SQLException {
-        File mydir = new File(Environment.getExternalStorageDirectory(), "VKCSurvey");
+        File mydir = new File(Environment.getExternalStorageDirectory(), "WalkarooSurvey");
         DB_PATH = mydir.getAbsolutePath() + "/" + DB_NAME;
         sqLiteHelper = new SQLiteHelper(context, DB_PATH, null, DB_VERSION);
         sqLiteDatabase = sqLiteHelper.getWritableDatabase();

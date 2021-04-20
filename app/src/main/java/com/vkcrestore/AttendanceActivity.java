@@ -18,15 +18,10 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,19 +33,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.vkcrestore.SQLiteServices.DatabaseHelper;
-import com.vkcrestore.Survey.Survey;
-import com.vkcrestore.UsrValues.ConnectionManager;
-import com.vkcrestore.UsrValues.PreferenceManager;
 import com.vkcrestore.api.VkcApis;
-import com.vkcrestore.gps.GPSTracker;
-import com.vkcrestore.gps.GpsLocationService;
 import com.vkcrestore.gps.GpsUtils;
 import com.vkcrestore.gps.LocationTrack;
 import com.vkcrestore.manager.AppPreferenceManager;
 import com.vkcrestore.manager.CustomProgressBar;
 import com.vkcrestore.manager.UtilityMethods;
-import com.vkcrestore.manager.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,16 +60,12 @@ public class AttendanceActivity extends Activity {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
-    ProgressDialog Dialog;
-    Typeface typeface;
+
     TextView txtIn;
     TextView txtOut;
-    LocationTrack locationTrack;
-    String latitude, longitude, placename;
+    static String latitude, longitude, placename = "";
     String attendance_type, attendance_id;
-    SimpleDateFormat simpleDateFormat;
     String user_location;
-    Calendar calander;
     EditText edtLocationName;
     CustomProgressBar progress;
     private boolean isContinue = false;
@@ -134,32 +118,7 @@ public class AttendanceActivity extends Activity {
                 isGPS = isGPSEnable;
             }
         });
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10 * 1000); // 10 seconds
-        locationRequest.setFastestInterval(5 * 1000); // 5 seconds
 
-
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        latitude = String.valueOf(location.getLatitude());
-                        longitude = String.valueOf(location.getLongitude());
-                        if (!isContinue && mFusedLocationClient != null) {
-                            mFusedLocationClient.removeLocationUpdates(locationCallback);
-                        }
-                    }
-                }
-            }
-        };
-        getLocation();
 
        /* latitude = String.valueOf(locationTrack.getLatitude());
         longitude = String.valueOf(locationTrack.getLongitude());*/
@@ -229,7 +188,7 @@ public class AttendanceActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-
+              //  String placename = "";
                 if (edtLocationName.getText().toString().trim().length() > 0) {
                     attendance_type = "in";
                     user_location = edtLocationName.getText().toString().trim();
@@ -243,7 +202,7 @@ public class AttendanceActivity extends Activity {
                         placename = getAddress(Double.parseDouble(latitude), Double.parseDouble(longitude));
                     }                    // Toast.makeText(AttendanceActivity.this, "Place :" + latitude, Toast.LENGTH_LONG).show();
 
-                    if (placename.trim().length() > 0) {
+                    if (placename.length() > 0) {
 
                         if (UtilityMethods.isNetworkConnected(context)) {
                             markAttendance logTask = new markAttendance();
@@ -252,6 +211,9 @@ public class AttendanceActivity extends Activity {
                             Toast.makeText(context, "Please check your internet connectivity...", Toast.LENGTH_SHORT).show();
 
                         }
+
+                    } else {
+                        Toast.makeText(context, "Unable to find the place name from location data...", Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
@@ -466,7 +428,7 @@ public class AttendanceActivity extends Activity {
                 add = add + "\n" + obj.getLocality();
                 place = obj.getLocality();
 
-                Log.v("IGA", "Address" + add);
+                //Log.v("IGA", "Address" + add);
             } else {
                 Toast.makeText(this, "Unable to detect the location", Toast.LENGTH_SHORT).show();
             }
@@ -485,8 +447,31 @@ public class AttendanceActivity extends Activity {
     PermissionListener permissionVidyoCalllistener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
-//            Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
-            // splash();
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AttendanceActivity.this);
+            locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(2 * 1000); // 10 seconds
+            locationRequest.setFastestInterval(1 * 1000); // 5 seconds
+
+
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (locationResult == null) {
+                        return;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null) {
+                            latitude = String.valueOf(location.getLatitude());
+                            longitude = String.valueOf(location.getLongitude());
+                            if (!isContinue && mFusedLocationClient != null) {
+                                mFusedLocationClient.removeLocationUpdates(locationCallback);
+                            }
+                        }
+                    }
+                }
+            };
+            getLocation();
 
         }
 
@@ -610,6 +595,8 @@ public class AttendanceActivity extends Activity {
                         if (location != null) {
                             latitude = String.valueOf(location.getLatitude());
                             longitude = String.valueOf(location.getLongitude());
+                            placename = getAddress(location.getLatitude(), location.getLongitude());
+
                             // txtLocation.setText(String.format(Locale.US, "%s - %s", wayLatitude, wayLongitude));
                         } else {
                             if (ActivityCompat.checkSelfPermission(AttendanceActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AttendanceActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -695,5 +682,6 @@ public class AttendanceActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
     }
 }

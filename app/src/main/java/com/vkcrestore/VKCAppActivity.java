@@ -165,15 +165,7 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
                         Toast.LENGTH_SHORT).show();
             }
         }
-        try {
-            databaseHelper.createDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // setupSplash();
-        // PreferenceManager.saveUpgrade("yes", context);
-        initializeComponents();
-        mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+
         // //Loop question testing
         // $tree_ques =
         // ORM::factory('survey_question')->where('question_tree_id', '=',
@@ -915,7 +907,15 @@ public class VKCAppActivity extends Activity implements ConnectivityReceiverList
         public void onPermissionGranted() {
 //            Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
             // splash();
-
+            try {
+                databaseHelper.createDataBase();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // setupSplash();
+            // PreferenceManager.saveUpgrade("yes", context);
+            initializeComponents();
+            mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
         }
 
         @Override

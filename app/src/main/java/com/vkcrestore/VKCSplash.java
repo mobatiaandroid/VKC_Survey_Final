@@ -38,8 +38,7 @@ public class VKCSplash extends Activity {
     String flag;
     Context context;
     LocationTrack locationTrack;
-    String latitude, longitude, placename = "";
-    ArrayList<String> listEmpty;
+    static String latitude, longitude, placename = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class VKCSplash extends Activity {
         setContentView(R.layout.activity_splash);
         context = this;
         flag = AppPreferenceManager.getFlag(context);
-        int size = listEmpty.size();
+        // int size = listEmpty.size();
         new GpsUtility(this).turnGPSOn(new GpsUtility.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {
@@ -60,7 +59,7 @@ public class VKCSplash extends Activity {
 
         if ((int) Build.VERSION.SDK_INT >= 23) {
             TedPermission.with(context)
-                    .setPermissionListener(permissionVidyoCalllistener)
+                    .setPermissionListener(permissionListener)
                     .setDeniedMessage("If you reject permission,you cannot use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                     .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA)
                     .check();
@@ -114,13 +113,14 @@ public class VKCSplash extends Activity {
 
     }
 
-    PermissionListener permissionVidyoCalllistener = new PermissionListener() {
+    PermissionListener permissionListener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
 //            Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
             // splash();
-
+            String placename = "";
             locationTrack = new LocationTrack(VKCSplash.this);
+
             if (locationTrack.canGetLocation()) {
                 try {
                     Intent i = new Intent(VKCSplash.this,
